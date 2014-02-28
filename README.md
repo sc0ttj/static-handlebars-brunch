@@ -66,6 +66,17 @@ exports.config =
       outputDirectory: 'app/another_directory'
 ```
 
+### Default template data
+
+You can pass in an initial set of data to be statically compiled into your handlebars templates
+
+```coffee
+exports.config =
+  plugins:
+    staticHandlebars:
+      data: myAPIKey: 'FOOBAR'
+```
+
 ## TODO
 
 This library has a long way to go in terms of configurability and compatability
