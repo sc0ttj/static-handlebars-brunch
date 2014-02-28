@@ -3,6 +3,7 @@ sysPath = require("path")
 fs = require("fs")
 glob = require("glob")
 mkdirp = require("mkdirp")
+debug = require("debug")("brunch:staticHandlebars")
 
 module.exports = class StaticHandlebarsCompiler
   brunchPlugin: true
@@ -19,6 +20,8 @@ module.exports = class StaticHandlebarsCompiler
     glob "app/templates/_*.hbs", (err, files) =>
       if err?
         callback(err)
+      else if !files.length
+        callback(null, partials)
       else
         files.forEach (file) ->
           name = sysPath.basename(file, ".hbs").substr(1)
@@ -46,6 +49,7 @@ module.exports = class StaticHandlebarsCompiler
 
           mkdirp.sync(sysPath.dirname(newPath))
 
+          debug 'writing file', newPath
           fs.writeFile newPath, html, (err) ->
             callback(err, null)
 
