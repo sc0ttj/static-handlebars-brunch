@@ -5,19 +5,45 @@ glob = require("glob")
 mkdirp = require("mkdirp")
 debug = require("debug")("brunch:staticHandlebars")
 progeny = require("progeny")
+_ = require("lodash")
 
 module.exports = class StaticHandlebarsCompiler
   brunchPlugin: true
   type: "template"
   extension: "hbs"
+  defaults: {
+    outputDirectory: 'public'
+    templatesDirectory: 'app/templates'
+    partials: {
+      directory: 'app/templates'
+      prefix: '_'
+    }
+    data: {}
+  }
 
   constructor: (@config) ->
-    @outputDirectory = @config?.plugins?.staticHandlebars?.outputDirectory || 'public'
-    @templatesDirectory = @config?.plugins?.staticHandlebars?.templatesDirectory || 'app/templates' 
-    @partialsDirectory = @config?.plugins?.staticHandlebars?.partials?.directory || @templatesDirectory
-    @partialsPrefix = @config?.plugins?.staticHandlebars?.partials?.prefix || ''
-    @staticData = @config?.plugins?.staticHandlebars?.data || {}
-    @rootPath = @config?.paths?.root || process.cwd()
+    @config = @config || {}
+    @config.plugins = @config.plugins || {}
+    @config.plugins.staticHandlebars = @config.plugins.staticHandlebars || {}
+    @config.plugins.staticHandlebars.partials = @config.plugins.staticHandlebars.partials || {}
+
+    @rootPath = @config.paths?.root || process.cwd()
+    # @outputDirectory = @config?.plugins?.staticHandlebars?.outputDirectory || 'public'
+    # @templatesDirectory = @config?.plugins?.staticHandlebars?.templatesDirectory || 'app/templates' 
+    # @partialsDirectory = @config?.plugins?.staticHandlebars?.partials?.directory || @templatesDirectory
+    # @partialsPrefix = @config?.plugins?.staticHandlebars?.partials?.prefix || '_'
+    # @staticData = @config?.plugins?.staticHandlebars?.data || {}
+
+    @outputDirectory = @config.plugins.staticHandlebars.outputDirectory || 'public'
+    @templatesDirectory = @config.plugins.staticHandlebars.templatesDirectory || 'app/templates'
+    @staticData = @config.plugins.staticHandlebars.data || {}
+    @partialsDirectory = @config.plugins.staticHandlebars.partials.directory || @templatesDirectory
+    @partialsPrefix =  '_'
+
+    # empty string is valid but is falsy so check for it explicitly
+    if 'string' == typeof @config.plugins.staticHandlebars.partials.prefix
+      @partialsPrefix = @config.plugins.staticHandlebars.partials.prefix
+    
     @getDependencies = progeny({
       rootPath: @rootPath
       extension: 'hbs'
