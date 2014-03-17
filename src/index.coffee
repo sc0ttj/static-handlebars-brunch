@@ -13,6 +13,9 @@ module.exports = class StaticHandlebarsCompiler
 
   constructor: (@config) ->
     @outputDirectory = @config?.plugins?.staticHandlebars?.outputDirectory || 'public'
+    @templatesDirectory = @config?.plugins?.staticHandlebars?.templatesDirectory || 'app/templates' 
+    @partialsDirectory = @config?.plugins?.staticHandlebars?.partials?.directory || @templatesDirectory
+    @partialsPrefix = @config?.plugins?.staticHandlebars?.partials?.prefix || ''
     @staticData = @config?.plugins?.staticHandlebars?.data || {}
     @rootPath = @config?.paths?.root || process.cwd()
     @getDependencies = progeny({
@@ -21,21 +24,23 @@ module.exports = class StaticHandlebarsCompiler
       extensionsList: ['hbs']
       regexp: /^\s*\{\{> ([\w]*)\}\}/
       exclusion: /a^/
-      prefix: ''
+      prefix: @partialsPrefix
     })
 
   withPartials: (callback) ->
     partials = {}
     errThrown = false
 
-    glob "app/templates/_*.hbs", (err, files) =>
+    glob sysPath.join(@partialsDirectory, @partialsPrefix + '*.hbs'), (err, files) =>
       if err?
         callback(err)
       else if !files.length
         callback(null, partials)
       else
         files.forEach (file) ->
-          name = sysPath.basename(file, ".hbs").substr(1)
+          name = sysPath.basename(file, ".hbs")
+          if @partialsPrefix?
+            name = name.substr(@partialsPrefix.length)
 
           fs.readFile file, (err, data) ->
             if err? and !errThrown
@@ -56,7 +61,8 @@ module.exports = class StaticHandlebarsCompiler
           callback(err)
         else
           html = template(@staticData, partials: partials, helpers: @makeHelpers(partials))
-          newPath = @outputDirectory + path.slice(13, -4) + ".html"
+          relPath = sysPath.relative(@templatesDirectory, path)
+          newPath = sysPath.join(@outputDirectory, relPath.slice(0, -4) + ".html")
 
           mkdirp.sync(sysPath.dirname(newPath))
 
