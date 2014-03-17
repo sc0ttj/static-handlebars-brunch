@@ -5,7 +5,6 @@ glob = require("glob")
 mkdirp = require("mkdirp")
 debug = require("debug")("brunch:staticHandlebars")
 progeny = require("progeny")
-_ = require("lodash")
 
 module.exports = class StaticHandlebarsCompiler
   brunchPlugin: true
@@ -28,12 +27,6 @@ module.exports = class StaticHandlebarsCompiler
     @config.plugins.staticHandlebars.partials = @config.plugins.staticHandlebars.partials || {}
 
     @rootPath = @config.paths?.root || process.cwd()
-    # @outputDirectory = @config?.plugins?.staticHandlebars?.outputDirectory || 'public'
-    # @templatesDirectory = @config?.plugins?.staticHandlebars?.templatesDirectory || 'app/templates' 
-    # @partialsDirectory = @config?.plugins?.staticHandlebars?.partials?.directory || @templatesDirectory
-    # @partialsPrefix = @config?.plugins?.staticHandlebars?.partials?.prefix || '_'
-    # @staticData = @config?.plugins?.staticHandlebars?.data || {}
-
     @outputDirectory = @config.plugins.staticHandlebars.outputDirectory || 'public'
     @templatesDirectory = @config.plugins.staticHandlebars.templatesDirectory || 'app/templates'
     @staticData = @config.plugins.staticHandlebars.data || {}
