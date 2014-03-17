@@ -4,6 +4,7 @@ fs = require("fs")
 glob = require("glob")
 mkdirp = require("mkdirp")
 debug = require("debug")("brunch:staticHandlebars")
+progeny = require("progeny")
 
 module.exports = class StaticHandlebarsCompiler
   brunchPlugin: true
@@ -13,6 +14,15 @@ module.exports = class StaticHandlebarsCompiler
   constructor: (@config) ->
     @outputDirectory = @config?.plugins?.staticHandlebars?.outputDirectory || 'public'
     @staticData = @config?.plugins?.staticHandlebars?.data || {}
+    @rootPath = @config?.paths?.root || process.cwd()
+    @getDependencies = progeny({
+      rootPath: @rootPath
+      extension: 'hbs'
+      extensionsList: ['hbs']
+      regexp: /^\s*\{\{> ([\w]*)\}\}/
+      exclusion: /a^/
+      prefix: ''
+    })
 
   withPartials: (callback) ->
     partials = {}
