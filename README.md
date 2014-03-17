@@ -66,6 +66,33 @@ exports.config =
       outputDirectory: 'app/another_directory'
 ```
 
+### Templates directory
+
+You can customize the source directory (default: `app/templates`)
+
+```coffee
+exports.config =
+  plugins:
+    staticHandlebars:
+      templatesDirectory: 'app/another_directory'
+```
+
+### Partials
+
+You can customize the way partials are processed
+
+```coffee
+exports.config =
+  plugins:
+    staticHandlebars:
+      partials:
+        directory: 'app/partials'
+        prefix: '_'
+```
+
+* `directory`: Source directory for partials. Defaults to templatesDirectory
+* `prefix`: Expected prefix. Defaults to '_'
+
 ### Default template data
 
 You can pass in an initial set of data to be statically compiled into your handlebars templates
