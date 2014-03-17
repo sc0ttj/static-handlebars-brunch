@@ -11,8 +11,7 @@
     "url": "git@github.com:bloudermilk/static-handlebars-brunch.git"
   },
   "main": "./lib/index",
-  "scripts": {
-  },
+  "scripts": {},
   "engines": {
     "node": "~ 0.10.0"
   },
@@ -23,5 +22,8 @@
     "debug": "~ 0.7.4"
   },
   "devDependencies": {
+    "mocha": "^1.18.0",
+    "chai": "^1.9.0",
+    "coffee-script": "^1.7.1"
   }
 }
