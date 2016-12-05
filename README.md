@@ -11,7 +11,7 @@ Add `static-handlebars-brunch` to your `package.json` file:
 
 ```json
 "dependencies": {
-  "static-handlebars-brunch": "~ 0.1.0"
+  "static-handlebars-brunch": "github:sc0ttj/static-handlebars-brunch",
 }
 ```
 
