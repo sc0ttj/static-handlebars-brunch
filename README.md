@@ -23,29 +23,31 @@ $ npm install
 
 ## How it works
 
-Any `.hbs` file found in `app/templates` will be compiled to `.html` and copied
-into `app/assets`. Brunch will then copy `app/assets` to `public`.
+Any `.tmpl` file found in `src/app/templates` will be compiled to `.html` and copied
+into `src/app/assets`. Brunch will then copy `src/app/assets` to `www`.
 
 ## Partials
 
-A partial is any `.hbs` file in `app/templates` that begins with an underscore,
-for example: `app/templates/_header.hbs`.
+A partial is any `.tmpl` file in `src/app/templates` that begins with an underscore,
+for example: `src/app/templates/_header.tmpl`.
 
 You can use the standard Handlebars partial helper to include partials in a
-template:
+template.
 
-```hbs
-{{> header}}
+Example = include the partials `_header.tmpl` and `_footer.tmpl` inside another page:
+
+```tmpl
+{{> _header}}
 
 <p>This is a page!</p>
 
-{{> footer}}
+{{> _footer}}
 ```
 
 A custom partial helper is available which allows you to pass variables to your
 partials.
 
-```hbs
+```tmpl
 {{partial "header" title="My great page"}}
 
 <p>This is a page!</p>
@@ -113,7 +115,7 @@ support. Feel free to send a pull request if you end up implementing any.
 * Support a custom source path (ie. `app/templates`).
 * Play nicely with `handlebars-brunch` (ie. figure out how to support both
   plugins in one app).
-* Support custom extensions (only `.hbs` is supported now).
+* Support custom extensions (only `.tmpl` is supported now).
 * Cache partials (right now partials are recompiled up every time a file is
   changed).
 * Write tests
